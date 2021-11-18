@@ -1,0 +1,1 @@
+用domain层实现application层的bloc逻辑，完成event到state的变换
