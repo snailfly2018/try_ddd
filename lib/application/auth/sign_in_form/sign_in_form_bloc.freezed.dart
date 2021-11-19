@@ -869,6 +869,7 @@ mixin _$SignInFormState {
       throw _privateConstructorUsedError; //表示api正在运行中，该参数用户显示类loading界面
   bool get isSubmitting =>
       throw _privateConstructorUsedError; //api返回的结果，Option是一种可空数据类型的很好包装，none表示空
+//之所以option是因为没有api调用的情况下是没有成功失败一说的
   Option<Either<AuthFailure, Unit>> get authFailureOrSuccessOption =>
       throw _privateConstructorUsedError;
 
@@ -1010,6 +1011,7 @@ class _$_SignInFormState implements _SignInFormState {
   @override //表示api正在运行中，该参数用户显示类loading界面
   final bool isSubmitting;
   @override //api返回的结果，Option是一种可空数据类型的很好包装，none表示空
+//之所以option是因为没有api调用的情况下是没有成功失败一说的
   final Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption;
 
   @override
@@ -1064,6 +1066,7 @@ abstract class _SignInFormState implements SignInFormState {
   @override //表示api正在运行中，该参数用户显示类loading界面
   bool get isSubmitting;
   @override //api返回的结果，Option是一种可空数据类型的很好包装，none表示空
+//之所以option是因为没有api调用的情况下是没有成功失败一说的
   Option<Either<AuthFailure, Unit>> get authFailureOrSuccessOption;
   @override
   @JsonKey(ignore: true)
