@@ -16,9 +16,9 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
   SignInFormBloc(this._authFacade) : super(SignInFormState.initial()) {
     on<EmailChanged>(_onEmailChange);
     on<PasswordChanged>(_onPasssWordChange);
-    on<RegisterWithEmailAndPasswordPressed>(_onRegisterWithEmailAndPassword);
-    on<SignInWithEmailAndPasswordPressed>(_onSignInWithEmailAndPassword);
-    on<SignInWithGooglePressed>(_onSignInWithGoogle);
+    on<RegisterWithEmailAndPassword>(_onRegisterWithEmailAndPassword);
+    on<SignInWithEmailAndPassword>(_onSignInWithEmailAndPassword);
+    on<SignInWithGoogle>(_onSignInWithGoogle);
   }
 
   //需要一个api的实现
@@ -47,7 +47,7 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
   }
 
   FutureOr<void> _onRegisterWithEmailAndPassword(
-      RegisterWithEmailAndPasswordPressed event,
+      RegisterWithEmailAndPassword event,
       Emitter<SignInFormState> emit) async {
     Either<AuthFailure, Unit>? failureOrSuccess;
 
@@ -75,7 +75,7 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
   }
 
   FutureOr<void> _onSignInWithEmailAndPassword(
-      SignInWithEmailAndPasswordPressed event,
+      SignInWithEmailAndPassword event,
       Emitter<SignInFormState> emit) async {
     Either<AuthFailure, Unit>? failureOrSuccess;
 
@@ -103,7 +103,7 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
   }
 
   Future<FutureOr<void>> _onSignInWithGoogle(
-      SignInWithGooglePressed event, Emitter<SignInFormState> emit) async {
+      SignInWithGoogle event, Emitter<SignInFormState> emit) async {
     emit(
       state.copyWith(
         isSubmitting: true,

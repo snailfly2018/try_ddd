@@ -10,6 +10,7 @@ class SignInFormState with _$SignInFormState {
     //表示api正在运行中，该参数用户显示类loading界面
     required bool isSubmitting,
     //api返回的结果，Option是一种可空数据类型的很好包装，none表示空
+    //之所以option是因为没有api调用的情况下是没有成功失败一说的
     required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption,
   }) = _SignInFormState;
 

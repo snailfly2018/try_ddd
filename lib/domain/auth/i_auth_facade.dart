@@ -15,6 +15,7 @@ abstract class IAuthFacade {
   //之所以用unit来代表成功是我们不打算要api调用成功的返回值
   //在这一层我们用EmailAddress,Password的类型来调用api，表示调用的时候我们会保证他们的right
   //如何他们left，该抛出异常了，说明写的逻辑有问题了
+  //返回right(unit) 或则left(AuthFailure) 
   Future<Either<AuthFailure, Unit>> registerWithEmailAndPassword({
     required EmailAddress emailAddress,
     required Password password,
