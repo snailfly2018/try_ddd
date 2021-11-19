@@ -33,8 +33,51 @@ void main() {
       signInFormBloc.close();
     });
 
-    test('initial state', () {
+  ///老派的写法也是很不错的
+    test(
+        'initial state then right email and right password and sign in at last',
+        () async {
+      when(mockIAuthFacade.signInWithEmailAndPassword(
+              emailAddress: EmailAddress(rightEmail),
+              password: Password(rightPassword)))
+          .thenAnswer((_) async => rightUnit);
+
       expect(signInFormBloc.state, SignInFormState.initial());
+      final expected = [
+        SignInFormState.initial()
+            .copyWith(emailAddress: EmailAddress(rightEmail)),
+        SignInFormState.initial().copyWith(
+          emailAddress: EmailAddress(rightEmail),
+          password: Password(rightPassword),
+        ),
+        SignInFormState.initial().copyWith(
+          emailAddress: EmailAddress(rightEmail),
+          password: Password(rightPassword),
+          isSubmitting: true,
+          authFailureOrSuccessOption: none(),
+        ),
+        SignInFormState.initial().copyWith(
+          emailAddress: EmailAddress(rightEmail),
+          password: Password(rightPassword),
+          isSubmitting: false,
+          showErrorMessages: true,
+          authFailureOrSuccessOption: some(rightUnit),
+        ),
+      ];
+
+      expectLater(signInFormBloc.stream, emitsInOrder(expected));
+      signInFormBloc.add(const EmailChanged(rightEmail));
+      signInFormBloc.add(const PasswordChanged(rightPassword));
+      signInFormBloc.add(const SignInFormEvent.signInWithEmailAndPassword());
+
+      await untilCalled(mockIAuthFacade.signInWithEmailAndPassword(
+        emailAddress: EmailAddress(rightEmail),
+        password: Password(rightPassword),
+      ));
+      verify(mockIAuthFacade.signInWithEmailAndPassword(
+        emailAddress: EmailAddress(rightEmail),
+        password: Password(rightPassword),
+      )).called(1);
     });
 
     blocTest<SignInFormBloc, SignInFormState>(
