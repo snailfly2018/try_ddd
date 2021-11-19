@@ -54,11 +54,11 @@ void main() {
       'password changed',
       build: () => signInFormBloc,
       act: (bloc) {
-        bloc.add(const PasswordChanged(rightPassword));
+        bloc.add(const PasswordChanged(shortPassword));
       },
       seed: () => SignInFormState.initial(),
       expect: () => [
-        SignInFormState.initial().copyWith(password: Password(rightPassword))
+        SignInFormState.initial().copyWith(password: Password(shortPassword))
       ],
     );
 
@@ -83,7 +83,9 @@ void main() {
     blocTest<SignInFormBloc, SignInFormState>(
       'signIn with right email address and right password',
       setUp: () {
-        when(mockIAuthFacade.signInWithEmailAndPassword(emailAddress: EmailAddress(rightEmail),password: Password(rightPassword)))
+        when(mockIAuthFacade.signInWithEmailAndPassword(
+                emailAddress: EmailAddress(rightEmail),
+                password: Password(rightPassword)))
             .thenAnswer((_) async => rightUnit);
       },
       build: () => signInFormBloc,
@@ -94,6 +96,12 @@ void main() {
         emailAddress: EmailAddress(rightEmail),
         password: Password(rightPassword),
       ),
+      // verify: (_) async{
+      //   verify(() => mockIAuthFacade.signInWithEmailAndPassword(
+      //         emailAddress: EmailAddress(rightEmail),
+      //         password: Password(rightPassword),
+      //       )).called(1);
+      // },
       expect: () => [
         SignInFormState.initial().copyWith(
           emailAddress: EmailAddress(rightEmail),

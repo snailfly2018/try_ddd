@@ -46,8 +46,10 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
     );
   }
 
-  FutureOr<void> _onRegisterWithEmailAndPassword(
-      RegisterWithEmailAndPassword event,
+  FutureOr<void> _performActionWithEmailAndPassword(
+      Future<Either<AuthFailure, Unit>> Function(
+              {required EmailAddress emailAddress, required Password password})
+          forwardedCall,
       Emitter<SignInFormState> emit) async {
     Either<AuthFailure, Unit>? failureOrSuccess;
 
@@ -55,51 +57,40 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
     final isPasswordValid = state.password.isValid();
 
     if (isEmailValid && isPasswordValid) {
+      //开始行动
       emit(state.copyWith(
         isSubmitting: true,
         authFailureOrSuccessOption: none(),
       ));
 
-      failureOrSuccess = await _authFacade.registerWithEmailAndPassword(
+      failureOrSuccess = await forwardedCall(
         emailAddress: state.emailAddress,
         password: state.password,
       );
     }
+    //行动结束
     emit(state.copyWith(
       isSubmitting: false,
-      showErrorMessages: true,
+      showErrorMessages: true, //开始显示错误信息了
+      //optionOf() 可以将null转换为none(),非null转为some()
       // optionOf is equivalent to:
       // failureOrSuccess == null ? none() : some(failureOrSuccess)
       authFailureOrSuccessOption: optionOf(failureOrSuccess),
     ));
   }
 
+  FutureOr<void> _onRegisterWithEmailAndPassword(
+      RegisterWithEmailAndPassword event, Emitter<SignInFormState> emit) async {
+    _performActionWithEmailAndPassword(
+        _authFacade.registerWithEmailAndPassword, emit);
+  }
+
   FutureOr<void> _onSignInWithEmailAndPassword(
-      SignInWithEmailAndPassword event,
-      Emitter<SignInFormState> emit) async {
-    Either<AuthFailure, Unit>? failureOrSuccess;
-
-    final isEmailValid = state.emailAddress.isValid();
-    final isPasswordValid = state.password.isValid();
-
-    if (isEmailValid && isPasswordValid) {
-      emit(state.copyWith(
-        isSubmitting: true,
-        authFailureOrSuccessOption: none(),
-      ));
-
-      failureOrSuccess = await _authFacade.signInWithEmailAndPassword(
-        emailAddress: state.emailAddress,
-        password: state.password,
-      );
-    }
-    emit(state.copyWith(
-      isSubmitting: false,
-      showErrorMessages: true,
-      // optionOf is equivalent to:
-      // failureOrSuccess == null ? none() : some(failureOrSuccess)
-      authFailureOrSuccessOption: optionOf(failureOrSuccess),
-    ));
+      SignInWithEmailAndPassword event, Emitter<SignInFormState> emit) async {
+    _performActionWithEmailAndPassword(
+      _authFacade.signInWithEmailAndPassword,
+      emit,
+    );
   }
 
   Future<FutureOr<void>> _onSignInWithGoogle(
