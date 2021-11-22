@@ -79,7 +79,7 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
     );
   }
 
-    FutureOr<void> _performActionWithEmailAndPassword(
+  FutureOr<void> _performActionWithEmailAndPassword(
       Future<Either<AuthFailure, Unit>> Function(
               {required EmailAddress emailAddress, required Password password})
           forwardedCall,
@@ -100,6 +100,16 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
         emailAddress: state.emailAddress,
         password: state.password,
       );
+
+      // emit(state.copyWith(
+      //   isSubmitting: false,
+      //   showErrorMessages: true, //开始显示错误信息了
+      //   //optionOf() 可以将null转换为none(),非null转为some()
+      //   // optionOf is equivalent to:
+      //   // failureOrSuccess == null ? none() : some(failureOrSuccess)
+      //   authFailureOrSuccessOption: optionOf(failureOrSuccess),
+      // ));
+      print('api call return $failureOrSuccess');
     }
     //行动结束
     emit(state.copyWith(
@@ -110,5 +120,6 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
       // failureOrSuccess == null ? none() : some(failureOrSuccess)
       authFailureOrSuccessOption: optionOf(failureOrSuccess),
     ));
+    print('api call return $failureOrSuccess in the end');
   }
 }

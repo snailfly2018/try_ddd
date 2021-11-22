@@ -1,7 +1,10 @@
 import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:try_ddd/application/auth/auth_bloc.dart';
 import 'package:try_ddd/application/auth/sign_in_form/sign_in_form_bloc.dart';
+import '../../router/router.gr.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -21,6 +24,7 @@ class _SignInFormState extends State<SignInForm> {
     return BlocConsumer<SignInFormBloc, SignInFormState>(
       listener: (context, state) {
         {
+          //登录结果回来的处理
           state.authFailureOrSuccessOption.match(
             (either) => either.fold(
               (failure) {
@@ -34,10 +38,10 @@ class _SignInFormState extends State<SignInForm> {
                 ).show(context);
               },
               (_) {
-                // context.pushRoute(const NotesOverviewRoute());
-                // context
-                //     .read<AuthBloc>()
-                //     .add(const AuthEvent.authCheckRequested());
+                context.replaceRoute(const NotesOverviewRoute());
+                context
+                    .read<AuthBloc>()
+                    .add(const AuthEvent.authCheckRequested());
               },
             ),
             () {},
@@ -51,11 +55,11 @@ class _SignInFormState extends State<SignInForm> {
         nowState = state;
 
         return Form(
-          // autovalidateMode: state.showErrorMessages
-          //     ? AutovalidateMode.always
-          //     : AutovalidateMode.disabled,
+          autovalidateMode: state.showErrorMessages
+              ? AutovalidateMode.always
+              : AutovalidateMode.disabled,
           key: _formKey,
-          autovalidateMode: AutovalidateMode.always,
+          // autovalidateMode: AutovalidateMode.always,
           child: ListView(
             // ignore: prefer_const_literals_to_create_immutables
             padding: const EdgeInsets.all(16.0),
@@ -121,8 +125,7 @@ class _SignInFormState extends State<SignInForm> {
                     child: TextButton(
                       onPressed: () {
                         context.read<SignInFormBloc>().add(
-                              const SignInFormEvent
-                                  .signInWithEmailAndPassword(),
+                              const SignInWithEmailAndPassword(),
                             );
                       },
                       child: const Text('SIGN IN'),
@@ -132,8 +135,7 @@ class _SignInFormState extends State<SignInForm> {
                     child: TextButton(
                       onPressed: () {
                         context.read<SignInFormBloc>().add(
-                              const SignInFormEvent
-                                  .registerWithEmailAndPassword(),
+                              const RegisterWithEmailAndPassword(),
                             );
                       },
                       child: const Text('REGISTER'),
@@ -144,7 +146,7 @@ class _SignInFormState extends State<SignInForm> {
               ElevatedButton(
                 onPressed: () {
                   context.read<SignInFormBloc>().add(
-                        const SignInFormEvent.signInWithGoogle(),
+                        const SignInWithGoogle(),
                       );
                 },
                 style: ButtonStyle(
