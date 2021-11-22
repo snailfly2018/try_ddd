@@ -13,7 +13,7 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     const testKey = Key('K');
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const AppWidget(key: testKey,));
+    await tester.pumpWidget(AppWidget(key: testKey,));
 
     // Verify that our counter starts at 0.
     expect(find.byKey(testKey), findsOneWidget);

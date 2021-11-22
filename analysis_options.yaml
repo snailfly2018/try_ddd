@@ -33,3 +33,4 @@ analyzer:
     - '**/*.g.dart'
     - '**/*.mocks.dart'
     - '**/*.config.dart'
+    - '**/*.gr.dart'
