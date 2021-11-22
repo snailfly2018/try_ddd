@@ -28,8 +28,8 @@ class FirebaseAuthFacade implements IAuthFacade {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: emailAddressString, password: passwordString);
       return right(unit); //没错了
-    } on PlatformException catch (e) {
-      if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
         return left(const AuthFailure.emailAlreadyInUse());
       } else {
         return left(const AuthFailure.serverError());
@@ -47,10 +47,10 @@ class FirebaseAuthFacade implements IAuthFacade {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: emailAddressString, password: passwordString);
       return right(unit);
-    } on PlatformException catch (e) {
+    } on FirebaseAuthException catch (e) {
       //两种情况统一为email password combination error
-      if (e.code == 'ERROR_WRONG_PASSWORD' ||
-          e.code == 'ERROR_USER_NOT_FOUND') {
+      if (e.code == 'user-not-found' ||
+          e.code == 'wrong-password') {
         return left(const AuthFailure.invalidEmailAndPasswordCombination());
       } else {
         return left(const AuthFailure.serverError());

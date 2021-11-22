@@ -11,6 +11,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        //根据登入情况选择页面
         state.map(
           initial: (_) {},
           authenticated: (_) => context.replaceRoute(const NotesOverviewRoute()),

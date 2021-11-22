@@ -38,13 +38,17 @@ class _SignInFormState extends State<SignInForm> {
                 ).show(context);
               },
               (_) {
+                //登入成功的结果
                 context.replaceRoute(const NotesOverviewRoute());
+                //引发登入成功失败state
                 context
                     .read<AuthBloc>()
                     .add(const AuthEvent.authCheckRequested());
               },
             ),
-            () {},
+            () {
+              // print('authFailureOrSuccessOption:none');
+            },
           );
         }
       },

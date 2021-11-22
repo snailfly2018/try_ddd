@@ -15,89 +15,89 @@ part 'sign_in_form_bloc.freezed.dart';
 @injectable
 class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
   //给bloc一个初始化状态
-  SignInFormBloc(this._authFacade) : super(SignInFormState.initial());
-  // {
-  //   on<EmailChanged>(_onEmailChange);
-  //   on<PasswordChanged>(_onPasssWordChange);
-  //   on<RegisterWithEmailAndPassword>(_onRegisterWithEmailAndPassword);
-  //   on<SignInWithEmailAndPassword>(_onSignInWithEmailAndPassword);
-  //   on<SignInWithGoogle>(_onSignInWithGoogle);
-  // }
+  SignInFormBloc(this._authFacade) : super(SignInFormState.initial())
+  {
+    on<EmailChanged>(_onEmailChange);
+    on<PasswordChanged>(_onPasssWordChange);
+    on<RegisterWithEmailAndPassword>(_onRegisterWithEmailAndPassword);
+    on<SignInWithEmailAndPassword>(_onSignInWithEmailAndPassword);
+    on<SignInWithGoogle>(_onSignInWithGoogle);
+  }
 
   //需要一个api的实现
   final IAuthFacade _authFacade;
 
   //bloc逻辑所在，收到一个event，发送一个state到流
-    @override
-  Stream<SignInFormState> mapEventToState(
-    SignInFormEvent event,
-  ) async* {
-    yield* event.map(emailChanged: (e) async* {
-      print('log::yield $e.emailStr');
-      yield state.copyWith(
-        emailAddress: EmailAddress(e.emailStr),
-        authFailureOrSuccessOption: none(),
-      );
-    }, passwordChanged: (e) async* {
-      yield state.copyWith(
-        password: Password(e.passwordStr),
-        authFailureOrSuccessOption: none(),
-      );
-    }, registerWithEmailAndPassword: (e) async* {
-      yield* _performActionOnAuthFacadeWithEmailAndPassword(
-        _authFacade.registerWithEmailAndPassword,
-      );
-    }, signInWithEmailAndPassword: (e) async* {
-      yield* _performActionOnAuthFacadeWithEmailAndPassword(
-        _authFacade.signInWithEmailAndPassword,
-      );
-    }, signInWithGoogle: (e) async* {
-      //先发一个行动开始状态
-      yield state.copyWith(
-        isSubmitting: true,
-        authFailureOrSuccessOption: none(),
-      );
-      final failureOrSuccess = await _authFacade.signInWithGoogle();
-      //行动完成状态，failureOrSuccess是结果Either
-      yield state.copyWith(
-        isSubmitting: false,
-        authFailureOrSuccessOption: some(failureOrSuccess), //some对应于none
-      );
-    });
-  }
+  // @override
+  // Stream<SignInFormState> mapEventToState(
+  //   SignInFormEvent event,
+  // ) async* {
+  //   yield* event.map(emailChanged: (e) async* {
+  //     // print('log::yield $e.emailStr');
+  //     yield state.copyWith(
+  //       emailAddress: EmailAddress(e.emailStr),
+  //       authFailureOrSuccessOption: none(),
+  //     );
+  //   }, passwordChanged: (e) async* {
+  //     yield state.copyWith(
+  //       password: Password(e.passwordStr),
+  //       authFailureOrSuccessOption: none(),
+  //     );
+  //   }, registerWithEmailAndPassword: (e) async* {
+  //     yield* _performActionOnAuthFacadeWithEmailAndPassword(
+  //       _authFacade.registerWithEmailAndPassword,
+  //     );
+  //   }, signInWithEmailAndPassword: (e) async* {
+  //     yield* _performActionOnAuthFacadeWithEmailAndPassword(
+  //       _authFacade.signInWithEmailAndPassword,
+  //     );
+  //   }, signInWithGoogle: (e) async* {
+  //     //先发一个行动开始状态
+  //     yield state.copyWith(
+  //       isSubmitting: true,
+  //       authFailureOrSuccessOption: none(),
+  //     );
+  //     final failureOrSuccess = await _authFacade.signInWithGoogle();
+  //     //行动完成状态，failureOrSuccess是结果Either
+  //     yield state.copyWith(
+  //       isSubmitting: false,
+  //       authFailureOrSuccessOption: some(failureOrSuccess), //some对应于none
+  //     );
+  //   });
+  // }
 
-    Stream<SignInFormState> _performActionOnAuthFacadeWithEmailAndPassword(
-    Future<Either<AuthFailure, Unit>> Function(
-            {required EmailAddress emailAddress, required Password password})
-        forwardedCall,
-  ) async* {
-    Either<AuthFailure, Unit>? failureOrSuccess;
+  //   Stream<SignInFormState> _performActionOnAuthFacadeWithEmailAndPassword(
+  //   Future<Either<AuthFailure, Unit>> Function(
+  //           {required EmailAddress emailAddress, required Password password})
+  //       forwardedCall,
+  // ) async* {
+  //   Either<AuthFailure, Unit>? failureOrSuccess;
 
-    final isEmailValid = state.emailAddress.isValid();
-    final isPasswordValid = state.password.isValid();
+  //   final isEmailValid = state.emailAddress.isValid();
+  //   final isPasswordValid = state.password.isValid();
 
-    if (isEmailValid && isPasswordValid) {
-      //开始行动
-      yield state.copyWith(
-        isSubmitting: true,
-        authFailureOrSuccessOption: none(),
-      );
+  //   if (isEmailValid && isPasswordValid) {
+  //     //开始行动
+  //     yield state.copyWith(
+  //       isSubmitting: true,
+  //       authFailureOrSuccessOption: none(),
+  //     );
 
-      failureOrSuccess = await forwardedCall(
-        emailAddress: state.emailAddress,
-        password: state.password,
-      );
-    }
-    //行动结束
-    yield state.copyWith(
-      isSubmitting: false,
-      showErrorMessages: true, //开始显示错误信息了
-      //optionOf() 可以将null转换为none(),非null转为some()
-      // optionOf is equivalent to:
-      // failureOrSuccess == null ? none() : some(failureOrSuccess)
-      authFailureOrSuccessOption: optionOf(failureOrSuccess),
-    );
-  }
+  //     failureOrSuccess = await forwardedCall(
+  //       emailAddress: state.emailAddress,
+  //       password: state.password,
+  //     );
+  //   }
+  //   //行动结束
+  //   yield state.copyWith(
+  //     isSubmitting: false,
+  //     showErrorMessages: true, //开始显示错误信息了
+  //     //optionOf() 可以将null转换为none(),非null转为some()
+  //     // optionOf is equivalent to:
+  //     // failureOrSuccess == null ? none() : some(failureOrSuccess)
+  //     authFailureOrSuccessOption: optionOf(failureOrSuccess),
+  //   );
+  // }
 
 
   FutureOr<void> _onEmailChange(
@@ -122,16 +122,62 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
 
   FutureOr<void> _onRegisterWithEmailAndPassword(
       RegisterWithEmailAndPassword event, Emitter<SignInFormState> emit) async {
-    _performActionWithEmailAndPassword(
-        _authFacade.registerWithEmailAndPassword, emit);
+    Either<AuthFailure, Unit>? failureOrSuccess;
+
+    final isEmailValid = state.emailAddress.isValid();
+    final isPasswordValid = state.password.isValid();
+
+    if (isEmailValid && isPasswordValid) {
+      //开始行动
+      emit(state.copyWith(
+        isSubmitting: true,
+        authFailureOrSuccessOption: none(),
+      ));
+
+      failureOrSuccess = await _authFacade.registerWithEmailAndPassword(
+        emailAddress: state.emailAddress,
+        password: state.password,
+      );
+    }
+    //行动结束
+    emit(state.copyWith(
+      isSubmitting: false,
+      showErrorMessages: true, //开始显示错误信息了
+      //optionOf() 可以将null转换为none(),非null转为some()
+      // optionOf is equivalent to:
+      // failureOrSuccess == null ? none() : some(failureOrSuccess)
+      authFailureOrSuccessOption: optionOf(failureOrSuccess),
+    ));
   }
 
   FutureOr<void> _onSignInWithEmailAndPassword(
       SignInWithEmailAndPassword event, Emitter<SignInFormState> emit) async {
-    _performActionWithEmailAndPassword(
-      _authFacade.signInWithEmailAndPassword,
-      emit,
-    );
+    Either<AuthFailure, Unit>? failureOrSuccess;
+
+    final isEmailValid = state.emailAddress.isValid();
+    final isPasswordValid = state.password.isValid();
+
+    if (isEmailValid && isPasswordValid) {
+      //开始行动
+      emit(state.copyWith(
+        isSubmitting: true,
+        authFailureOrSuccessOption: none(),
+      ));
+
+      failureOrSuccess = await _authFacade.signInWithEmailAndPassword(
+        emailAddress: state.emailAddress,
+        password: state.password,
+      );
+    }
+    //行动结束
+    emit(state.copyWith(
+      isSubmitting: false,
+      showErrorMessages: true, //开始显示错误信息了
+      //optionOf() 可以将null转换为none(),非null转为some()
+      // optionOf is equivalent to:
+      // failureOrSuccess == null ? none() : some(failureOrSuccess)
+      authFailureOrSuccessOption: optionOf(failureOrSuccess),
+    ));
   }
 
   Future<FutureOr<void>> _onSignInWithGoogle(
@@ -151,47 +197,37 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
     );
   }
 
-  FutureOr<void> _performActionWithEmailAndPassword(
-      Future<Either<AuthFailure, Unit>> Function(
-              {required EmailAddress emailAddress, required Password password})
-          forwardedCall,
-      Emitter<SignInFormState> emit) async {
-    Either<AuthFailure, Unit>? failureOrSuccess;
+  // FutureOr<void> _performActionWithEmailAndPassword(
+  //     Future<Either<AuthFailure, Unit>> Function(
+  //             {required EmailAddress emailAddress, required Password password})
+  //         forwardedCall,
+  //     Emitter<SignInFormState> emit) async {
+  //   Either<AuthFailure, Unit>? failureOrSuccess;
 
-    final isEmailValid = state.emailAddress.isValid();
-    final isPasswordValid = state.password.isValid();
+  //   final isEmailValid = state.emailAddress.isValid();
+  //   final isPasswordValid = state.password.isValid();
 
-    if (isEmailValid && isPasswordValid) {
-      //开始行动
-      emit(state.copyWith(
-        isSubmitting: true,
-        authFailureOrSuccessOption: none(),
-      ));
+  //   if (isEmailValid && isPasswordValid) {
+  //     //开始行动
+  //     emit(state.copyWith(
+  //       isSubmitting: true,
+  //       authFailureOrSuccessOption: none(),
+  //     ));
 
-      failureOrSuccess = await forwardedCall(
-        emailAddress: state.emailAddress,
-        password: state.password,
-      );
-
-      // emit(state.copyWith(
-      //   isSubmitting: false,
-      //   showErrorMessages: true, //开始显示错误信息了
-      //   //optionOf() 可以将null转换为none(),非null转为some()
-      //   // optionOf is equivalent to:
-      //   // failureOrSuccess == null ? none() : some(failureOrSuccess)
-      //   authFailureOrSuccessOption: optionOf(failureOrSuccess),
-      // ));
-      print('api call return $failureOrSuccess');
-    }
-    //行动结束
-    emit(state.copyWith(
-      isSubmitting: false,
-      showErrorMessages: true, //开始显示错误信息了
-      //optionOf() 可以将null转换为none(),非null转为some()
-      // optionOf is equivalent to:
-      // failureOrSuccess == null ? none() : some(failureOrSuccess)
-      authFailureOrSuccessOption: optionOf(failureOrSuccess),
-    ));
-    print('api call return $failureOrSuccess in the end');
-  }
+  //     failureOrSuccess = await forwardedCall(
+  //       emailAddress: state.emailAddress,
+  //       password: state.password,
+  //     );
+  //   }
+  //   //行动结束
+  //   emit(state.copyWith(
+  //     isSubmitting: false,
+  //     showErrorMessages: true, //开始显示错误信息了
+  //     //optionOf() 可以将null转换为none(),非null转为some()
+  //     // optionOf is equivalent to:
+  //     // failureOrSuccess == null ? none() : some(failureOrSuccess)
+  //     authFailureOrSuccessOption: optionOf(failureOrSuccess),
+  //   ));
+  //   // print('api call return $failureOrSuccess in the end');
+  // }
 }
