@@ -29,3 +29,4 @@ class Password extends ValueObject<String> {
   ///私有化
   const Password._(this.value);
 }
+

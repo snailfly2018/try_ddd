@@ -1,11 +1,14 @@
 
 import 'package:fpdart/fpdart.dart';
+import 'package:try_ddd/domain/auth/user.dart';
 import 'package:try_ddd/domain/auth/value_objects.dart';
 
 import 'auth_failure.dart';
 
 abstract class IAuthFacade {
   
+  Future<Option<UserId>> getSignedInUser();
+    
   //三个主要函数，异步的实现在repo层，返回是void，考虑到异常
   //返回一个Either，left是错误，right 用unit代替void表示返回空，类型的原因
   //各种错误也用freezed union 来实现

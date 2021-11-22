@@ -5,7 +5,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:try_ddd/domain/auth/auth_failure.dart';
 import 'package:try_ddd/domain/auth/i_auth_facade.dart';
+import 'package:try_ddd/domain/auth/user.dart';
 import 'package:try_ddd/domain/auth/value_objects.dart';
+import 'package:try_ddd/domain/core/value_objects.dart';
 
 @LazySingleton(as: IAuthFacade)
 class FirebaseAuthFacade implements IAuthFacade {
@@ -25,7 +27,7 @@ class FirebaseAuthFacade implements IAuthFacade {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: emailAddressString, password: passwordString);
-      return right(unit);//没错了
+      return right(unit); //没错了
     } on PlatformException catch (e) {
       if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
         return left(const AuthFailure.emailAlreadyInUse());
@@ -81,4 +83,16 @@ class FirebaseAuthFacade implements IAuthFacade {
         _googleSignIn.signOut(),
         _firebaseAuth.signOut(),
       ]);
+
+  @override
+  Future<Option<UserId>> getSignedInUser() async {
+    if (_firebaseAuth.currentUser == null) {
+      return none();
+    } else {
+      return some(UserId(
+          id: UniqueId.fromUniqueString(_firebaseAuth.currentUser!.uid)));
+    }
+  }
+  // return optionOf(_firebaseAuth.currentUser?.toDomain());
+
 }

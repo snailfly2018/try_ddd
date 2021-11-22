@@ -3,6 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:try_ddd/domain/core/errors.dart';
 
 import 'package:try_ddd/domain/core/value_failure.dart';
+import 'package:uuid/uuid.dart';
 
 @immutable
 abstract class ValueObject<T> {
@@ -32,4 +33,26 @@ abstract class ValueObject<T> {
   @override
   String toString() => 'Value($value)';
 
+}
+
+class UniqueId extends ValueObject<String> {
+  @override
+  final Either<ValueFailure<String>, String> value;
+
+  ///缺省通过Uuid构建
+  factory UniqueId() {
+    return UniqueId._(
+      right(const Uuid().v1()),
+    );
+  }
+
+  ///给定uid
+  factory UniqueId.fromUniqueString(String uniqueId) {
+    return UniqueId._(
+      right(uniqueId),
+    );
+  }
+
+  ///私有化
+  const UniqueId._(this.value);
 }

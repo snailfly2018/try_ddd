@@ -19,7 +19,9 @@ import 'package:try_ddd/domain/auth/value_objects.dart' as _i6;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeEither_0<L, R> extends _i1.Fake implements _i2.Either<L, R> {}
+class _FakeOption_0<T> extends _i1.Fake implements _i2.Option<T> {}
+
+class _FakeEither_1<L, R> extends _i1.Fake implements _i2.Either<L, R> {}
 
 /// A class which mocks [IAuthFacade].
 ///
@@ -30,6 +32,12 @@ class MockIAuthFacade extends _i1.Mock implements _i3.IAuthFacade {
   }
 
   @override
+  _i4.Future<_i2.Option<dynamic>> getSignedInUser() =>
+      (super.noSuchMethod(Invocation.method(#getSignedInUser, []),
+              returnValue:
+                  Future<_i2.Option<dynamic>>.value(_FakeOption_0<dynamic>()))
+          as _i4.Future<_i2.Option<dynamic>>);
+  @override
   _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>
       registerWithEmailAndPassword(
               {_i6.EmailAddress? emailAddress, _i6.Password? password}) =>
@@ -37,7 +45,7 @@ class MockIAuthFacade extends _i1.Mock implements _i3.IAuthFacade {
               Invocation.method(#registerWithEmailAndPassword, [],
                   {#emailAddress: emailAddress, #password: password}),
               returnValue: Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>.value(
-                  _FakeEither_0<_i5.AuthFailure, _i2.Unit>())) as _i4
+                  _FakeEither_1<_i5.AuthFailure, _i2.Unit>())) as _i4
               .Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>);
   @override
   _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>> signInWithEmailAndPassword(
@@ -46,13 +54,13 @@ class MockIAuthFacade extends _i1.Mock implements _i3.IAuthFacade {
               Invocation.method(#signInWithEmailAndPassword, [],
                   {#emailAddress: emailAddress, #password: password}),
               returnValue: Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>.value(
-                  _FakeEither_0<_i5.AuthFailure, _i2.Unit>()))
+                  _FakeEither_1<_i5.AuthFailure, _i2.Unit>()))
           as _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>);
   @override
   _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>> signInWithGoogle() =>
       (super.noSuchMethod(Invocation.method(#signInWithGoogle, []),
               returnValue: Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>.value(
-                  _FakeEither_0<_i5.AuthFailure, _i2.Unit>()))
+                  _FakeEither_1<_i5.AuthFailure, _i2.Unit>()))
           as _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>);
   @override
   _i4.Future<void> signOut() =>
