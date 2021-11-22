@@ -8,14 +8,9 @@ import 'package:try_ddd/presentation/core/app_widget.dart';
 import 'injection.dart';
 
 Future<void> main() async {
+  Bloc.observer = MyBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   configureInjection(Environment.prod); //注入
   await Firebase.initializeApp();
-  BlocOverrides.runZoned(
-    () {
-      // Use blocs...
-      runApp(AppWidget());
-    },
-    blocObserver: MyBlocObserver(),
-  );  
+  runApp(AppWidget());
 }
