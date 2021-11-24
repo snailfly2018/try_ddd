@@ -19,6 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<FutureOr<void>> _onAuthCheckRequested(
       AuthCheckRequested event, Emitter<AuthState> emit) async {
+        //拿到的UserId并没有用？
     final userOption = await _authFacade.getSignedInUser();
     emit(userOption.match(
       (_) => const AuthState.authenticated(),

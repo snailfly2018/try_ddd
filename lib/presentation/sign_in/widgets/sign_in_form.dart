@@ -40,13 +40,14 @@ class _SignInFormState extends State<SignInForm> {
               (_) {
                 //登入成功的结果
                 context.replaceRoute(const NotesOverviewRoute());
-                //引发登入成功失败state
+                //发一个取用户的事件，但有人在听吗？现在
                 context
                     .read<AuthBloc>()
                     .add(const AuthEvent.authCheckRequested());
               },
             ),
             () {
+              // 这里的重复是否有些多啊？每次email password 的state变化都来这里一下
               // print('authFailureOrSuccessOption:none');
             },
           );

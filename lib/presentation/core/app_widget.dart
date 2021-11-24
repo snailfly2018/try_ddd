@@ -17,11 +17,12 @@ class AppWidget extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) =>
-              getIt<AuthBloc>()..add(const AuthEvent.authCheckRequested()), //开始发一个auth check
+          create: (context) => getIt<AuthBloc>()
+            ..add(const AuthEvent.authCheckRequested()), //开始发一个auth check
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         title: 'Notes',
         theme: ThemeData.light().copyWith(
           primaryColor: Colors.green[800],
@@ -35,9 +36,9 @@ class AppWidget extends StatelessWidget {
             ),
           ),
         ),
-        home: MaterialApp.router(
-            routeInformationParser: _appRouter.defaultRouteParser(),
-            routerDelegate: _appRouter.delegate()),
+        // home: MaterialApp.router(
+        routeInformationParser: _appRouter.defaultRouteParser(),
+        routerDelegate: _appRouter.delegate(),
       ),
     );
   }

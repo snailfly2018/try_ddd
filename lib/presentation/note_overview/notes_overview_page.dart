@@ -14,7 +14,9 @@ class NotesOverviewPage extends StatelessWidget {
       listener: (context, state) {
         state.maybeMap(
           unauthenticated: (_) => context.replaceRoute(const SignInRoute()),
-          orElse: () {},
+          orElse: () {
+            //听到登入成功并不做什么
+          },
         );
       },
       child: Scaffold(
