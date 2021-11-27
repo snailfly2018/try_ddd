@@ -43,3 +43,19 @@ class AppWidget extends StatelessWidget {
     );
   }
 }
+
+
+/* When the platform emits a new route (for example, “books/2”) , 
+the RouteInformationParser converts it into an abstract data type T that you define in your app
+ (for example, a class called BooksRoutePath).
+
+RouterDelegate’s setNewRoutePath method is called with this data type, and must update 
+the application state to reflect the change (for example, by setting the selectedBookId) 
+and call notifyListeners.
+
+When notifyListeners is called, it tells the Router to rebuild the RouterDelegate 
+(using its build() method)
+
+RouterDelegate.build() returns a new Navigator, whose pages now reflect the change to the app state 
+(for example, the selectedBookId).
+*/

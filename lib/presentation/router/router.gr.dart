@@ -23,7 +23,7 @@ class Router extends _i4.RootStackRouter {
   final Map<String, _i4.PageFactory> pagesMap = {
     SplashRoute.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i1.SplashPage());
+          routeData: routeData, child: const _i1.SplashPage());
     },
     SignInRoute.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(

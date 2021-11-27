@@ -18,6 +18,14 @@ abstract class ValueObject<T> {
     return value.fold((f) => throw UnexpectedValueError(f), id);
   }
 
+  ///提取,用于判断right的时候继续，错了就返回错
+  Either<ValueFailure<dynamic>, Unit> get failureOrUnit {
+    return value.fold(
+      (l) => left(l),
+      (r) => right(unit),
+    );
+  }
+  
   ///判断
   bool isValid() => value.isRight();
   
