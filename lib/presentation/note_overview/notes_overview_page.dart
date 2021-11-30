@@ -6,8 +6,10 @@ import 'package:try_ddd/application/auth/auth_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:try_ddd/application/notes/note_actor/note_actor_bloc.dart';
 import 'package:try_ddd/application/notes/note_watcher/note_watcher_bloc.dart';
+import 'package:try_ddd/presentation/note_overview/widgets/uncompleted_switch.dart';
 import '../../injection.dart';
 import '../router/router.gr.dart';
+import 'widgets/notes_overview_body_widget.dart';
 
 class NotesOverviewPage extends StatelessWidget {
   const NotesOverviewPage({Key? key}) : super(key: key);
@@ -59,10 +61,11 @@ class NotesOverviewPage extends StatelessWidget {
               },
               icon: const Icon(Icons.exit_to_app),
             ),
+            actions: [
+              const UncompletedSwitch(),
+            ],
           ),
-          body: const Center(
-            child: Text('note body'),
-          ),
+          body: const NotesOverviewBody(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
             child: const Icon(Icons.add),
