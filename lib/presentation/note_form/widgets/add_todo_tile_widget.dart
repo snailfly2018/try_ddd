@@ -15,6 +15,7 @@ class AddTodoTile extends StatelessWidget {
       listenWhen: (previous, current) =>
           previous.isEditing != current.isEditing,
       listener: (context, state) {
+        //初始化formTodos
         context.formTodos = state.note.todos.value.fold(
             (failure) => listOf<TodoItemPrimitive>(),
             (todoItemList) =>
@@ -31,6 +32,7 @@ class AddTodoTile extends StatelessWidget {
             child: Icon(Icons.add),
           ),
           onTap: () {
+            //formTodos 里保存了todolist的列表，最多三条
             context.formTodos =
                 context.formTodos.plusElement(TodoItemPrimitive.empty());
             context.read<NoteFormBloc>().add(

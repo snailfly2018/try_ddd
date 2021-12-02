@@ -41,6 +41,7 @@ class TodoList extends StatelessWidget {
             items: formTodos.value.asList(),
             areItemsTheSame: (oldItem, newItem) => oldItem.id == newItem.id,
             onReorderFinished: (item, from, to, newItem) {
+              //位子换好了
               context.formTodos = newItem.toImmutableList();
               context
                   .read<NoteFormBloc>()
@@ -80,6 +81,7 @@ class TodoTile extends HookWidget {
         context.formTodos.getOrElse(index, (_) => TodoItemPrimitive.empty());
     final textEditingController = useTextEditingController(text: todo.name);
 
+    //带删除
     return Slidable(
       actionPane: const SlidableDrawerActionPane(),
       actionExtentRatio: 0.15,

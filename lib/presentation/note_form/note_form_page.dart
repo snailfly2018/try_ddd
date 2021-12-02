@@ -142,6 +142,8 @@ class NoteFormPageScaffold extends StatelessWidget {
         buildWhen: (previous, current) =>
             previous.showErrorMessages != current.showErrorMessages,
         builder: (context, state) {
+          //用ChangeNotifierProvider来给下面的add todo tile和todolist提供可变的todolist数据（state）
+          //这里可以用bloc来完成吗？
           return ChangeNotifierProvider(
             create: (_) => FormTodos(),
             child: Form(
