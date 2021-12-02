@@ -61,13 +61,15 @@ class NotesOverviewPage extends StatelessWidget {
               },
               icon: const Icon(Icons.exit_to_app),
             ),
-            actions: [
-              const UncompletedSwitch(),
+            actions: const [
+              UncompletedSwitch(),
             ],
           ),
           body: const NotesOverviewBody(),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              AutoRouter.of(context).push(NoteFormRoute());
+            },
             child: const Icon(Icons.add),
           ),
         ),

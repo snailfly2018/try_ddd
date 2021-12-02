@@ -85,7 +85,8 @@ class NoteRepository implements INoteRepository {
     try {
       final userDoc = await _firebaseFirestore.userDocument();
       final noteDto = NoteDto.fromDomain(note);
-
+      print('saved note:${noteDto.id} ${noteDto.toJson()}');
+      
       await userDoc.noteCollection.doc(noteDto.id).update(noteDto.toJson());
 
       return right(unit);
